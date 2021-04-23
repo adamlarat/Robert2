@@ -7,6 +7,7 @@ Ce projet adhère au principe du [Semantic Versioning](https://semver.org/spec/v
 ## 0.13.0 (UNRELEASED)
 
 - Ajoute la création / suppression de devis pour les événements (#5).
+- __[CHANGEMENT CRITIQUE]__ Robert requiert maintenant au minimum PHP 7.3 pour fonctionner (#78).
 
 ## 0.12.0 (2021-03-29)
 
