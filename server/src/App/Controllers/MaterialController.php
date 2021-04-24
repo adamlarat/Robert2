@@ -3,18 +3,21 @@ declare(strict_types=1);
 
 namespace Robert2\API\Controllers;
 
-use Robert2\API\Errors;
 use Robert2\API\Config\Config;
-use Robert2\API\Models\Event;
-use Robert2\API\Models\Document;
-use Robert2\API\Models\Material;
 use Robert2\API\Controllers\Traits\Taggable;
-use Slim\Http\Request;
+use Robert2\API\Controllers\Traits\WithCrud;
+use Robert2\API\Errors;
+use Robert2\API\Models\Document;
+use Robert2\API\Models\Event;
+use Robert2\API\Models\Material;
 use Slim\Http\Response;
+use Slim\Http\ServerRequest as Request;
 
 class MaterialController extends BaseController
 {
-    use Taggable;
+    use WithCrud, Taggable {
+        Taggable::getAll insteadof WithCrud;
+    }
 
     /** @var Material */
     protected $model;
@@ -65,7 +68,7 @@ class MaterialController extends BaseController
         $basePath = $request->getUri()->getPath();
         $params = $request->getQueryParams();
         $results = $results->withPath($basePath)->appends($params);
-        $results = $this->_formatPagination($results);
+        $results = static::formatPagination($results);
 
         if ($dateForQuantities) {
             $results['data'] = $this->model->recalcQuantitiesForPeriod(

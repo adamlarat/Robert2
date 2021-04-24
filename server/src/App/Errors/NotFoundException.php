@@ -5,7 +5,7 @@ class NotFoundException extends \Exception
 {
     public function __construct(string $message = null)
     {
-        $message = $message ?: "The required resource was not found.";
+        $message = $message ?: "Not Found.";
         parent::__construct($message, ERROR_NOT_FOUND, null);
     }
 }

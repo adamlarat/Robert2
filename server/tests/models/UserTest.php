@@ -3,8 +3,10 @@ declare(strict_types=1);
 
 namespace Robert2\Tests;
 
-use Robert2\API\Models;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Robert2\API\Errors;
+use Robert2\API\Models;
+use Robert2\API\Models\User;
 
 final class UserTest extends ModelTestCase
 {
@@ -12,7 +14,7 @@ final class UserTest extends ModelTestCase
     {
         parent::setUp();
 
-        $this->model = new Models\User();
+        $this->model = new User();
     }
 
     public function testTableName(): void
@@ -122,14 +124,13 @@ final class UserTest extends ModelTestCase
         $this->assertEquals($expected, $result);
     }
 
-    public function testgetLoginNotFound(): void
+    public function testFromLoginNotFound(): void
     {
-        $this->expectException(Errors\NotFoundException::class);
-        $this->expectExceptionCode(ERROR_NOT_FOUND);
-        $this->model->getLogin('foo', 'bar');
+        $this->expectException(ModelNotFoundException::class);
+        User::fromLogin('foo', 'bar');
     }
 
-    public function testGetLogin(): void
+    public function testFromLogin(): void
     {
         $expectedUserData = array_merge($this->expectedDataUser1, [
             'cas_identifier' => null,
@@ -144,11 +145,11 @@ final class UserTest extends ModelTestCase
         ]);
 
         // - Retourne l'utilisateur n°1 et sa personne associée en utilisant l'e-mail
-        $result = $this->model->getLogin('tester@robertmanager.net', 'testing-pw')->toArray();
+        $result = User::fromLogin('tester@robertmanager.net', 'testing-pw')->toArray();
         $this->assertEquals($expectedUserData, $result);
 
         // - Retourne l'utilisateur n°1 et sa personne associée en utilisant le pseudo
-        $result = $this->model->getLogin('test1', 'testing-pw')->toArray();
+        $result = User::fromLogin('test1', 'testing-pw')->toArray();
         $this->assertEquals($expectedUserData, $result);
     }
 

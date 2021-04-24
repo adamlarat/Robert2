@@ -108,7 +108,7 @@ class Estimate extends BaseModel
         'user_id',
     ];
 
-    public function createFromEvent(int $eventId, int $userId, float $discountRate = 0.0): Model
+    public static function createFromEvent(int $eventId, int $userId, float $discountRate = 0.0): Model
     {
         $Event = new Event();
         $estimateEvent = $Event

@@ -220,9 +220,9 @@ class Event extends BaseModel
         return $builder;
     }
 
-    public function getMissingMaterials(int $id): ?array
+    public static function getMissingMaterials(int $id): ?array
     {
-        $event = $this->with('Materials')->find($id);
+        $event = self::with('Materials')->find($id);
         if (!$event || empty($event->materials)) {
             return null;
         }
@@ -248,9 +248,9 @@ class Event extends BaseModel
         return empty($missingMaterials) ? null : array_values($missingMaterials);
     }
 
-    public function getParks(int $id): ?array
+    public static function getParks(int $id): ?array
     {
-        $event = $this->with('Materials')->find($id);
+        $event = self::with('Materials')->find($id);
         if (!$event) {
             return null;
         }

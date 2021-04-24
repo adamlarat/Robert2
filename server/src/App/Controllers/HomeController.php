@@ -8,7 +8,7 @@ use Robert2\API\Errors;
 use Robert2\API\I18n\I18n;
 use Robert2\API\Models;
 use Robert2\Install;
-use Slim\Http\Request;
+use Slim\Http\ServerRequest as Request;
 use Slim\Http\Response;
 
 class HomeController
@@ -279,7 +279,7 @@ class HomeController
             'api' => [
                 'url' => $rawConfig['apiUrl'] . '/api',
                 'headers' => $rawConfig['apiHeaders'],
-                'version' => $this->getVersion()()
+                'version' => Config::getVersion(),
             ],
             'auth' => [
                 'cookie' => $rawConfig['auth']['cookie'],

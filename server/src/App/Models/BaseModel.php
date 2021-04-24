@@ -118,7 +118,36 @@ abstract class BaseModel extends Model
     // —
     // ——————————————————————————————————————————————————————
 
-    public function edit(?int $id = null, array $data = []): Model
+    public static function new(array $data = []): BaseModel
+    {
+        // TODO: Migrer les éventuels overwrites de la méthode legacy dans les modèles.
+        //       puis déplacer l'implémentation depuis la methode legacy vers cette méthode.
+        return static::staticEdit(null, $data);
+    }
+
+    public static function staticEdit(?int $id = null, array $data = []): BaseModel
+    {
+        // TODO: Migrer les éventuels overwrites de la méthode legacy dans les modèles.
+        //       puis déplacer l'implémentation depuis la methode legacy vers cette méthode.
+        return (new static)->edit($id, $data);
+    }
+
+    public static function staticRemove(int $id, array $options = []): ?BaseModel
+    {
+        // TODO: Migrer les éventuels overwrites de la méthode legacy dans les modèles.
+        //       puis déplacer l'implémentation depuis la methode legacy vers cette méthode.
+        return (new static)->remove($id, $options);
+    }
+
+    public static function staticUnremove(int $id): BaseModel
+    {
+        // TODO: Migrer les éventuels overwrites de la méthode legacy dans les modèles.
+        //       puis déplacer l'implémentation depuis la methode legacy vers cette méthode.
+        return (new static)->unremove($id);
+    }
+
+    /** @deprecated Veuillez utiliser `new` ou `staticEdit`. */
+    public function edit(?int $id = null, array $data = []): BaseModel
     {
         if ($id && !$this->exists($id)) {
             throw new Errors\NotFoundException(sprintf("Edit failed, record %d not found.", $id));
@@ -139,11 +168,10 @@ abstract class BaseModel extends Model
         return $model->refresh();
     }
 
-    public function remove(int $id, array $options = []): ?Model
+    /** @deprecated Veuillez utiliser `staticRemove`. */
+    public function remove(int $id, array $options = []): ?BaseModel
     {
-        $options = array_merge([
-            'force' => false
-        ], $options);
+        $options = array_merge(['force' => false], $options);
 
         $model = self::withTrashed()->find($id);
         if (empty($model)) {
@@ -164,7 +192,8 @@ abstract class BaseModel extends Model
         return $model;
     }
 
-    public function unremove(int $id): Model
+    /** @deprecated Veuillez utiliser `staticUnremove`. */
+    public function unremove(int $id): BaseModel
     {
         $model = self::onlyTrashed()->find($id);
         if (empty($model)) {
@@ -184,6 +213,14 @@ abstract class BaseModel extends Model
     // —
     // ——————————————————————————————————————————————————————
 
+    public static function staticExists(int $id): bool
+    {
+        // TODO: Migrer les éventuels overwrites de la méthode legacy dans les modèles.
+        //       puis déplacer l'implémentation depuis la methode legacy vers cette méthode.
+        return (new static)->exists($id);
+    }
+
+    /** @deprecated Veuillez utiliser `staticExists`. */
     public function exists(int $id): bool
     {
         return self::where('id', $id)->exists();

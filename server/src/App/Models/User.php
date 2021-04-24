@@ -3,13 +3,14 @@ declare(strict_types=1);
 
 namespace Robert2\API\Models;
 
-use Robert2\API\Config;
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\SoftDeletes;
-use Robert2\API\Validation\Validator as V;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
+use Illuminate\Database\Eloquent\SoftDeletes;
+use Robert2\API\Config;
 
 use Robert2\API\Errors;
+use Robert2\API\Validation\Validator as V;
 
 class User extends BaseModel
 {
@@ -108,7 +109,7 @@ class User extends BaseModel
         return parent::getAll($softDeleted)->select($fields);
     }
 
-    public function getLogin(string $identifier, string $password): User
+    public static function fromLogin(string $identifier, string $password): User
     {
         $user = self::where('email', $identifier)
             ->orWhere('pseudo', $identifier)
@@ -116,11 +117,11 @@ class User extends BaseModel
             ->first();
 
         if (!$user) {
-            throw new Errors\NotFoundException;
+            throw new ModelNotFoundException;
         }
 
         if (!password_verify($password, $user->password)) {
-            throw new Errors\NotFoundException;
+            throw new ModelNotFoundException;
         }
 
         unset($user->password);
@@ -153,12 +154,7 @@ class User extends BaseModel
         return $settings->toArray();
     }
 
-    public static function new(array $data = []): User
-    {
-        return (new static())->edit(null, $data);
-    }
-
-    public function edit(?int $id = null, array $data = []): Model
+    public function edit(?int $id = null, array $data = []): User
     {
         if (isset($data['password']) && !empty($data['password'])) {
             $data['password'] = password_hash($data['password'], PASSWORD_DEFAULT);

@@ -3,14 +3,17 @@ declare(strict_types=1);
 
 namespace Robert2\API\Controllers;
 
-use Slim\Http\Request;
-use Slim\Http\Response;
+use Robert2\API\Controllers\Traits\WithCrud;
 use Robert2\API\Errors;
-use Robert2\API\Services\Auth;
 use Robert2\API\Models\User;
+use Robert2\API\Services\Auth;
+use Slim\Http\Response;
+use Slim\Http\ServerRequest as Request;
 
 class UserController extends BaseController
 {
+    use WithCrud;
+
     /** @var User */
     protected $model;
 

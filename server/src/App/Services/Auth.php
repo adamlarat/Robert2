@@ -6,7 +6,7 @@ namespace Robert2\API\Services;
 use Robert2\API\Config\Acl;
 use Robert2\API\Services\Auth\AuthenticatorInterface;
 use Robert2\API\Models\User;
-use Slim\Http\Request;
+use Slim\Http\ServerRequest as Request;
 use Slim\Http\Response;
 
 final class Auth
